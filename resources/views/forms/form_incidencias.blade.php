@@ -11,7 +11,7 @@
      <tr>
          <td>
          <div class="col-md-6">
-         <div class="item form-group">
+         <div class="item form-group"> 
  <div class="col-md-2 col-sm-2 col-xs-2">
     {!!Html::decode(Form::label('status', 'Estado <span class="required">  </span>', ['class' => 'control-label']))!!}
      </div>

@@ -16,7 +16,7 @@ Route::resource('/', 'HomeController');
 Route::get('inicio', 'IncidenciasController@index');
 
 //---Login - restore----//
-
+ 
 // Autenticación
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', ['as' => 'auth/login', 'uses' => 'Auth\AuthController@postLogin']);
@@ -31,7 +31,7 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::get('/path/to/remote/validator/{id}', 'UsuariosController@valid');
 Route::get('/path/to/remote/email/{id}', 'UsuariosController@unique');
 
-//---INCIDENCIAS----//
+//---INCIDENCIAS----// 
 Route::resource('incidencias', 'IncidenciasController');
 Route::get('incidencias/seguimiento/{id}', 'IncidenciasController@seguimiento')->name('incidencias/seguimiento');
 Route::get('incidencias/registros/{id}', 'IncidenciasController@show')->name('incidencias/registros');

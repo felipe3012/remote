@@ -3,7 +3,7 @@
 @section('name',' <i class="fa fa-home fa-fw"></i> Incidencias')
 @section('breadcrumb','<li>Soporte</li><li>Incidencias</li><li class="active">Administrar</li>')
 @section('content')
-{{csrf_field()}}
+{{csrf_field()}} 
  <div class="row">
         <div class="col-md-12">
           <div class="white-box">

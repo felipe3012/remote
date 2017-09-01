@@ -46,7 +46,6 @@
 {!!Html::script('theme/plugins/bower_components/multiselect/js/jquery.multi-select.js')!!}
 <!-- Date Picker Plugin JavaScript -->
 {!!Html::script('theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js')!!}
-{!!Html::script('theme/plugins/bower_components/bootstrap-datepicker/es.js')!!}
 <!-- Date range Plugin JavaScript -->
 {!!Html::script('theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js')!!}
 {!!Html::script('theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.js')!!}

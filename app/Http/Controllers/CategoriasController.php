@@ -81,8 +81,10 @@ class CategoriasController extends Controller
             $request['level']        = $this->level($categories);
             $request['id']           = $u[0]->id + 1;
             if (User::create($request->all())) {
+                $this->eventsStore('0', 'Categorias', 'nuevo', 'Categoria '.$request['nombre'].' creada por '.Auth::user()->username);
                 Session::flash('message-success', 'categoria ' . $request['nombre'] . ' creado correctamente');
             } else {
+                $this->eventsStore('0', 'Categorias', 'nuevo', 'Erro al crear categoria '.$request['nombre'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al crear categoria' . $request['nombre']);
             }
             return $this->retorno("administracion_categorias");
@@ -168,8 +170,10 @@ class CategoriasController extends Controller
             $request['level']        = $this->level($categories);
             $this->categoria->fill($request->all());
             if ($this->categoria->save()) {
+                $this->eventsStore('0', 'Categorias', 'edicion', 'Categoria '.$request['name'].' editada por '.Auth::user()->username);
                 Session::flash('message-success', 'categoria ' . $request['nombre'] . ' actualizado correctamente');
             } else {
+                $this->eventsStore('0', 'Categorias', 'edicion', 'Error al editar categoria '.$request['name'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al actualizar categoria' . $request['nombre']);
             }
 

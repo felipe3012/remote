@@ -10,9 +10,9 @@ use App\User;
 use App\Usercategories;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use Session;
-use Hash;
+use Session; 
 use Auth;
+use Hash;
 use Redirect;
 
 class UsuariosController extends Controller
@@ -78,8 +78,10 @@ class UsuariosController extends Controller
         //
         if ($this->security(9)) {
             if (User::create($request->all())) {
+                $this->eventsStore('0', 'Usuarios', 'nuevo', 'Usuario '.$request['username'].' creado por '.Auth::user()->username);
                 Session::flash('message-success', 'Usuario ' . $request['name'] . ' creado correctamente');
             } else {
+                $this->eventsStore('0', 'Usuarios', 'nuevo', 'Error al crear usuario '.$request['username'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al crear usuario' . $request['name']);
             }
             return $this->retorno("administracion_usuarios");}
@@ -133,12 +135,24 @@ class UsuariosController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $activo = User::select('is_active')->where('id', $id)->get();
         if ($this->security(10)) {
             $this->usuario->fill($request->all());
             if ($this->usuario->save()) {
+                 if ($activo[0]->is_active == $request->is_active) {
+                    
+                }else{
+                    if($request->is_active == 1){
+                        $this->eventsStore('0', 'Usuarios', 'activar', 'Usuario '.$request['username'].' activado por '.Auth::user()->username);
+                    }elseif($request->is_active == 0){
+                        $this->eventsStore('0', 'Usuarios', 'inactivar', 'Usuario '.$request['username'].' inactivado por '.Auth::user()->username);
+                    }
+                }               
+                $this->eventsStore('0', 'Usuarios', 'edicion', 'Usuario '.$request['username'].' editado por '.Auth::user()->username);
                 Session::flash('message-success', 'Usuario ' . $request['nombre'] . ' actualizado correctamente');
             } else {
                 Session::flash('message-error', 'Error al actualizar usuario' . $request['nombre']);
+                $this->eventsStore('0', 'Usuarios', 'edicion', 'Error al editar usuario '.$request['username'].' intentado por '.Auth::user()->username);
             }
             return $this->retorno("administracion_usuarios");
         }
@@ -157,6 +171,7 @@ class UsuariosController extends Controller
             $usuario = User::find($id);
             $usuario->fill(['estado' => 2]);
             if ($usuario->save()) {
+                $this->eventsStore('0', 'Usuarios', 'inactivar', 'Usuario '.$request['username'].' inactivado por '.Auth::user()->username);
                 Session::flash('message-success', 'Usuario ' . $usuario->nombre . ' inactivado correctamente');
             } else {
                 Session::flash('message-error', 'Error al inactivar usuario ' . $usuario->nombre);
@@ -190,13 +205,15 @@ class UsuariosController extends Controller
  * @return [type]           [description]
  */
     public function change(Request $request)
-    {
+    { 
         //
         $usuario = User::find(Auth::user()->id);
         $usuario->fill(['password' => $request['password']]);
         if ($usuario->save()) {
+            $this->eventsStore('0', 'Usuarios', 'password', 'Contraseña de '.$usuario->username.' cambiada');
             Session::flash('message-success', 'Contraseña cambiada correctamente, Ingrese con su nueva contraseña');
-        } else {
+        } else { 
+            $this->eventsStore('0', 'Usuarios', 'password', 'Error al cambiar contraseña de '.$usuario->username);
             Session::flash('message-error', 'Error al cambiar la contraseña');
         }
 

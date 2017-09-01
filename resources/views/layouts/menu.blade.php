@@ -9,13 +9,12 @@
         </li>
          @if(in_array(5, $permisos))
         <li><a href="#" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Reportes <span class="fa arrow"></span></span></a>
-           <ul class="nav nav-second-level two-li"> 
+        <ul class="nav nav-second-level two-li"> 
              <li><a href="{!!url('administracion_usuarios')!!}">Estadisticas </a></li>
              <li><a href="{!!url('reportes')!!}">Reportes </a></li>
-            </ul>
         </li>
+        </ul>
           @endif
-          @if(in_array(8, $permisos) || in_array(23, $permisos) || in_array(13, $permisos) || in_array(28, $permisos) || in_array(18, $permisos) || in_array(18, $permisos))
         <li> <a href="#" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Administración<span class="fa arrow"></span></span></a>
           <ul class="nav nav-second-level two-li">  
            @if(in_array(8, $permisos))
@@ -24,7 +23,6 @@
            @if(in_array(23, $permisos))
              <li><a href="{!!url('administracion_entidades')!!}">Entidades </a></li>
            @endif
-           
            @if(in_array(13, $permisos))   
              <li><a href="{!!url('administracion_titulos')!!}">Titulos</a></li>
            @endif
@@ -34,13 +32,8 @@
            @if(in_array(18, $permisos))
               <li><a href="{!!url('administracion_perfiles')!!}">Perfiles </a></li>
            @endif
-            @if(in_array(18, $permisos))
-              <li><a href="{!!url('centros_de_costos')!!}">Centros de costo </a></li>
-           @endif
           </ul>
         </li>
-        @endif
-        @if(in_array(33, $permisos) || in_array(35, $permisos) || in_array(34, $permisos) || in_array(36, $permisos))
          <li> <a href="#" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Configuración<span class="fa arrow"></span></span></a>
           <ul class="nav nav-second-level two-li">
            @if(in_array(33, $permisos))
@@ -57,7 +50,7 @@
             @endif  
           </ul>
         </li>
-@endif
+
 </ul>
     </div>
   </div>

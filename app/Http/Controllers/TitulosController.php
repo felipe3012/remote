@@ -66,8 +66,10 @@ class TitulosController extends Controller
         //
         if ($this->security(14)) {
             if (Cargos::create($request->all())) {
+                $this->eventsStore('0', 'Titulos', 'nuevo', 'Titulo '.$request['nombre'].' creado por '.Auth::user()->username);
                 Session::flash('message-success', 'titulo ' . $request['nombre'] . ' creado correctamente');
             } else {
+                $this->eventsStore('0', 'Titulos', 'nuevo', 'Error al crear titulo '.$request['nombre'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al crear titulo' . $request['nombre']);
             }
             return $this->retorno("administracion_titulos");}
@@ -100,8 +102,10 @@ class TitulosController extends Controller
         if ($this->security(15)) {
             $this->titulo->fill($request->all());
             if ($this->titulo->save()) {
+                $this->eventsStore('0', 'Titulos', 'edicion', 'Titulo '.$request['nombre'].' creado por '.Auth::user()->username);
                 Session::flash('message-success', 'titulo ' . $request['nombre'] . ' actualizado correctamente');
             } else {
+                $this->eventsStore('0', 'Titulos', 'edicion', 'Error al editar titulo '.$request['nombre'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al actualizar titulo' . $request['nombre']);
             }
 

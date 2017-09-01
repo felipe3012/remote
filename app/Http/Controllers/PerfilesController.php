@@ -81,8 +81,10 @@ class PerfilesController extends Controller
                 foreach ($permisos as $value) {
                     Permisos::create(['perfil' => $perfil->id, 'funcionalidad' => $value]);
                 }
+                 $this->eventsStore('0', 'Perfiles', 'nuevo', 'Perfil '.$request['nombre'].' creado por '.Auth::user()->username);
                 Session::flash('message-success', 'Perfil ' . $request['nombre'] . ' creado correctamente');
             } catch (Exception $e) {
+                $this->eventsStore('0', 'Perfiles', 'nuevo', 'Erro al crear perfil '.$request['nombre'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al crear perfil' . $request['nombre']);
             }
 
@@ -142,9 +144,11 @@ class PerfilesController extends Controller
 
                         Permisos::create(['perfil' => $this->perfiles->id, 'funcionalidad' => $value]);
                     }
+                     $this->eventsStore('0', 'Perfiles', 'edicion', 'Perfil '.$request['name'].' editado por '.Auth::user()->username);
                     Session::flash('message-success', 'Perfil ' . $request['name'] . ' actualizado correctamente');
                 }
             } catch (Exception $e) {
+                 $this->eventsStore('0', 'Perfiles', 'edicion', 'Error al editar Perfil '.$request['name'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al actualizar perfil' . $request['name']);
             }
 
@@ -165,8 +169,10 @@ class PerfilesController extends Controller
             try {
                 Perfiles::destroy($id);
                 DB::table('permisos')->where('perfil', $id)->delete();
+                $this->eventsStore('0', 'Perfiles', 'elimiar', 'Perfil '.$nombre.' eliminado por '.Auth::user()->username);
                 Session::flash('message-success', 'Perfil ' . $nombre . ' eliminado correctamente');
             } catch (Exception $e) {
+                 $this->eventsStore('0', 'Perfiles', 'elimiar', 'Error al eliminar Perfil '.$nombre.' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al eliminar perfil' . $nombre);
             }
             return $this->retorno("administracion_perfiles");

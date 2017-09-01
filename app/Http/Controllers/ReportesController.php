@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Entidades;
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Http\Request;
+use App\Entidades;
+use App\User;
+use App\Categorias;
+use App\Tickets;
 
 class ReportesController extends Controller
 {
@@ -66,9 +68,7 @@ class ReportesController extends Controller
     public function show(Request $request, $id)
     {
         //
-        $raiz     = $this->build_raiz([]);
-        $tecnicos = User::lists('realname', 'id')->toArray();
-        return view('reportes.modals', compact('id', 'raiz','tecnicos'));
+        return view('reportes.modals', compact('id'));
     }
 
     /**
@@ -104,30 +104,4 @@ class ReportesController extends Controller
     {
         //
     }
-
-    /**
-     * [build_raiz description]
-     * @param  [type] $entidades [description]
-     * @return [type]            [description]
-     */
-    public function build_raiz($entidades)
-    {
-        $entidad = [];
-        $raiz    = '';
-        $raizes  = Entidades::all();
-
-        foreach ($raizes as $value) {
-            $subraiz = $value->entities_id;
-            $boolean = "false";
-            if (in_array($value->id, $entidad)) {
-                $boolean = "true";
-            }
-            if ($subraiz < 0) {
-                $subraiz = '#';
-            }
-            $raiz .= '{ "id" : "' . $value->id . '", "parent" : "' . $subraiz . '", "text" : "' . $value->name . '", "state": {"selected": ' . $boolean . '}},';
-        }
-        return $raiz;
-    }
-
 }

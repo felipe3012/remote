@@ -11,6 +11,7 @@ use App\Tickets;
 use App\User;
 use Carbon\Carbon;
 use DB;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Session;
@@ -84,11 +85,11 @@ class IncidenciasController extends Controller
         //
         $categorias = Itilcategories::all();
         $usuarios   = User::where('is_tecnico', 1)->lists('realname', 'id')->toArray();
-        $entidad    = Entidades::all();
+        $entidad    = Entidades::all(); 
         return view('incidencias.new', compact('categorias', 'usuarios', 'entidad'));
     }
 
-/**
+/** 
  * Store a newly created resource in storage.
  *
  * @param  \Illuminate\Http\Request  $request
@@ -96,14 +97,16 @@ class IncidenciasController extends Controller
  */
     public function store(Request $request)
     {
-        //
+        $request['status'] = 1;
         $incidencias = Tickets::create($request->all());
         if ($incidencias) {
-            Session::flash('message-success', 'Incidencia ' . $request['nombre'] . ' creado correctamente');
+            $this->eventsStore($incidencias->id, 'Incidencia', 'nuevo', 'Incidencia '.$incidencias->id.' creada por '.Auth::user()->username);
+            Session::flash('message-success', 'Incidencia ' . $request['name'] . ' creado correctamente');
         } else {
-            Session::flash('message-error', 'Error al crear incidencia' . $request['nombre']);
+            $this->eventsStore('0', 'Incidencia', 'nuevo', 'Error al crear incidencia '.$request['name'].' intentada por '.Auth::user()->username);
+            Session::flash('message-error', 'Error al crear incidencia' . $request['name']);
         }
-        return $this->retorno("incidencias");
+        return $this->retorno("incidencias"); 
     }
 
 /**
@@ -178,11 +181,14 @@ class IncidenciasController extends Controller
     public function update(Request $request, $id)
     {
         //
+        dd($request, $id); 
         $this->incidencias->fill($request->all());
         if ($this->incidencias->save()) {
-            Session::flash('message-success', 'Incidencia ' . $request['nombre'] . ' actualizado correctamente');
+            $this->eventsStore($id, 'Incidencia', 'edicion', 'Incidencia '.$request['ticket'].' editada por '.Auth::user()->username);
+            Session::flash('message-success', 'Incidencia ' . $request['name'] . ' actualizado correctamente');
         } else {
-            Session::flash('message-error', 'Error al actualizar incidencia' . $request['nombre']);
+            $this->eventsStore($id, 'Incidencia', 'edicion', 'Error al editar incidencia '.$request['ticket'].' intentado por '.Auth::user()->username);
+            Session::flash('message-error', 'Error al actualizar incidencia' . $request['name']);
         }
         return $this->retorno("incidencias");
     }

@@ -4,13 +4,6 @@
 @section('breadcrumb','<li> Reportes </li><li class="active"> Administrar</li>')
 @section('content')
 {!!Form::open(['route'=>'reportes.store','method'=>'POST','name'=>'frm','id'=>'frm','role'=>'form','data-toggle'=>'validator','class'=>'form-horizontal form-label-left'])!!}
-<div class="row">
-    <div class="col-md-12">
-        <div class="white-box">
-            <h3 class="box-title"> Seleccione el reporte que desea generar, aplique los filtros y de click en el botón descargar</h3>
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <a class="iframe" href="{!!url('reportes/1')!!}" title="Reporte - Incidencia x Tecnico"> <div class="col-md-3">
@@ -73,5 +66,6 @@
     </div>
     </a>
 </div>
+
 {!!Form::close()!!}
 @stop

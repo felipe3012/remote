@@ -18,7 +18,7 @@ class MantenimientosController extends Controller
         $this->beforeFilter('@find', ['only' => ['edit', 'update']]);
     }
 
-/**
+/** 
  * [find description]
  * @param  Route  $route [description]
  * @return [type]        [description]
@@ -64,8 +64,10 @@ class MantenimientosController extends Controller
         $salida = exec($filebat);
         $man    = Mantenimientos::create(['name' => $name]);
         if ($man) {
+            $this->eventsStore('0', 'Backup', 'nuevo', 'Backup '.$name.' creada por '.Auth::user()->username);
             Session::flash('message-success', 'Backup ' . $name . ' creado correctamente');
         } else {
+            $this->eventsStore('0', 'Backup', 'nuevo', 'Error al crear backup '.$name.' intentado por '.Auth::user()->username);
             Session::flash('message-success', 'Error al generar backup');
         }
         return $this->retorno("configuracion_mantenimiento");}
@@ -86,8 +88,10 @@ class MantenimientosController extends Controller
         exec('del /Q *.bat*');
         exec('del /Q ' . $nombre);
         if (Mantenimientos::destroy($id)) {
+            $this->eventsStore('0', 'Backup', 'elimiar', 'Backup '.$name.' eliminado por '.Auth::user()->username);
             Session::flash('message-success', 'Backup ' . $nombre . ' eliminado correctamente');
         } else {
+            $this->eventsStore('0', 'Backup', 'elimiar', 'Error al eliminar backup '.$name.' intentado por '.Auth::user()->username);
             Session::flash('message-error', 'Error al eliminar backup ' . $nombre);
         }
         return $this->retorno("configuracion_mantenimiento");}

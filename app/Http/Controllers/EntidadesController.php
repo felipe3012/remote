@@ -84,8 +84,10 @@ class EntidadesController extends Controller
             $request['id']           = $u[0]->id + 1;
             $entidades               = Entidades::create($request->all());
             if ($entidades) {
+                $this->eventsStore('0', 'Entidad', 'nuevo', 'Entidad '.$request['name'].' creada por '.Auth::user()->username);
                 Session::flash('message-success', 'Entidad ' . $request['name'] . ' creada correctamente');
             } else {
+                $this->eventsStore('0', 'Entidad', 'nuevo', 'Erro al crear entidad '.$request['name'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al crear entidad' . $request['name']);
             }
             return $this->retorno("administracion_entidades");
@@ -180,8 +182,10 @@ class EntidadesController extends Controller
 
             $this->entidades->fill($request->all());
             if ($this->entidades->save()) {
+                $this->eventsStore('0', 'Entidad', 'edicion', 'Entidad '.$request['name'].' editada por '.Auth::user()->username);
                 Session::flash('message-success', 'Entidad ' . $request['nombre'] . ' actualizada correctamente');
             } else {
+                $this->eventsStore('0', 'Entidad', 'edicion', 'Error al editar entidad '.$request['name'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al actualizar entidad' . $request['nombre']);
             }
             return $this->retorno("administracion_entidades");
@@ -199,8 +203,10 @@ class EntidadesController extends Controller
         //
         if ($this->security(25)) {
             if (Entidades::destroy($id)) {
+                $this->eventsStore('0', 'Entidad', 'elimiar', 'Entidad '.$request['name'].' eliminada por '.Auth::user()->username);
                 Session::flash('message-success', 'Entidad ' . $nombre . ' eliminada correctamente');
             } else {
+                $this->eventsStore('0', 'Entidad', 'elimiar', 'Error al eliminar entidad '.$request['name'].' intentado por '.Auth::user()->username);
                 Session::flash('message-error', 'Error al eliminar entidad' . $nombre);
             }
             return $this->retorno("administracion_entidades");
@@ -255,20 +261,16 @@ class EntidadesController extends Controller
     public function build_raiz($entidades)
     {
         $entidad = [];
-        $content = [];
         $raiz    = '';
-        $ent     = Auth::user()->entities_id;
-        $in      = $this->recursivo($ent);
-        $aux     = substr($ent . "," . $in, 0, -1);
-        $raizes  = Entidades::whereRaw('id IN (' . $aux . ')')->orderBy('entities_id', 'ASC')->get();
+        $raizes  = Entidades::all();
+
         foreach ($raizes as $value) {
             $subraiz = $value->entities_id;
-            array_push($content, $value->id);
             $boolean = "false";
             if (in_array($value->id, $entidad)) {
                 $boolean = "true";
             }
-            if ($subraiz < 0 || !in_array($subraiz, $content)) {
+            if ($subraiz < 0) {
                 $subraiz = '#';
             }
             $raiz .= '{ "id" : "' . $value->id . '", "parent" : "' . $subraiz . '", "text" : "' . $value->name . '", "state": {"selected": ' . $boolean . '}},';
